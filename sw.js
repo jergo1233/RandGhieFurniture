@@ -1,6 +1,6 @@
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open('gu-store-cache-v1').then((cache) => {
+    caches.open('gu-store-cache-v2').then((cache) => {
       return cache.addAll([
         '/',
         '/index.php',

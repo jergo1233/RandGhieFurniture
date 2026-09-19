@@ -3,7 +3,8 @@
 // ==========================================
 // GLOBAL VARIABLES & STATE
 
-window.adminInventoryData = []; 
+window.adminInventoryData = [];
+window.adminInventoryLoading = false;
 
 // ==========================================
 // NAVIGATION & UTILS
@@ -333,18 +334,19 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 4. Importante: I-bind ang event listener pag-load ng page
-const fileInput = document.getElementById('file-input');
-        if (fileInput) {
-            fileInput.removeEventListener('change', window.handleFileSelect); // Siguraduhing walang lumang listener
-            fileInput.addEventListener('change', window.handleFileSelect);
-        }
-        loadInventoryTable();
-    
+
 
 // ==========================================
 // INVENTORY CRUD
 // ==========================================
 async function loadInventoryTable() {
+    if (window.adminInventoryLoading) {
+        alert("Inventory data is still loading. Please wait a moment.");
+        return;
+    }
+
+    window.adminInventoryLoading = true;
+
     try {
         const res = await fetch('index.php?api=products');
         const products = await res.json();
@@ -364,20 +366,45 @@ async function loadInventoryTable() {
 
         products.forEach(p => {
             window.adminInventoryData[p.id] = p;
+
+            // Pagsasaayos ng Image Source (File Path vs Base64 vs Placeholder)
+    let imgSrc = 'placeholder.jpg';
+if (p.image && p.image.trim() !== '') {
+    // Kung buong URL o base64, gamitin agad
+    if (p.image.startsWith('data:image') || p.image.startsWith('http')) {
+        imgSrc = p.image;
+    } else {
+        // Siguraduhing tamang relative path ang nakukuha
+        imgSrc = p.image.startsWith('/') ? p.image.substring(1) : p.image;
+    }
+}
+
             html += `<tr>
-                <td style="padding: 10px; border: 1px solid #ddd;"><img src="data:image/jpeg;base64,${p.image}" style="width:50px; height:50px; object-fit:cover;"></td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    <img src="${imgSrc}" style="width:50px; height:50px; object-fit:cover; border-radius:4px;" onerror="this.src='placeholder.jpg'">
+                </td>
                 <td style="padding: 10px; border: 1px solid #ddd;">${p.name}</td>
                 <td style="padding: 10px; border: 1px solid #ddd;">₱${Number(p.price).toLocaleString()}</td>
                 <td style="padding: 10px; border: 1px solid #ddd;">
-                    <button onclick="window.prepareEdit(${p.id})" style="background:#2ecc71; color:white; border:none; padding:5px 10px; cursor:pointer; margin-right:5px;">Edit</button>
-                    <button onclick="window.deleteProduct(${p.id})" style="background:#e74c3c; color:white; border:none; padding:5px 10px; cursor:pointer;">Delete</button>
+                    <button onclick="window.prepareEdit(${p.id})" style="background:#2ecc71; color:white; border:none; padding:5px 10px; cursor:pointer; margin-right:5px; border-radius:3px;">Edit</button>
+                    <button onclick="window.deleteProduct(${p.id})" style="background:#e74c3c; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:3px;">Delete</button>
                 </td>
             </tr>`;
         });
         container.innerHTML = html + `</tbody></table>`;
-    } catch (e) { console.error("Table Load Error:", e); }
+    } catch (e) {
+        console.error("Table Load Error:", e);
+        alert("Failed to load inventory data. Please refresh the page.");
+    } finally {
+        window.adminInventoryLoading = false;
+    }
 }
 window.prepareEdit = function(id) {
+    if (window.adminInventoryLoading) {
+        alert("Inventory data is still loading. Please wait a moment.");
+        return;
+    }
+
     const product = window.adminInventoryData[id];
     if (!product) return;
 
@@ -445,6 +472,11 @@ window.updateProduct = async function() {
     }
 };
 window.deleteProduct = async function(id) {
+    if (window.adminInventoryLoading) {
+        alert("Inventory data is still loading. Please wait a moment.");
+        return;
+    }
+
     if (!confirm("Sigurado ka bang gusto mong burahin ang produktong ito?")) return;
 
     try {

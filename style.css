@@ -1,0 +1,652 @@
+/* ==========================================
+   1. BASE STYLES
+   ========================================== */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background-color: #F9F7F4;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #1A1A1A;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.product-card {
+    position: relative;
+    z-index: 10;         
+    cursor: pointer;         
+}
+
+.product-overlay {
+    pointer-events: none; 
+}
+
+.product-card-info p {
+    max-height: 80px;              
+    min-height: 20px;     
+    white-space: pre-line;           
+    overflow-y: auto;                
+    padding-right: 5px;
+    font-size: 12px;
+    color: #666;
+    line-height: 1.4;
+    margin-top: 5px;                
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    display: block;                
+}
+
+.product-card-price {
+    margin-bottom: 2px !important;   
+    font-weight: bold;
+    color: #27ae60;
+}
+
+/* Manipis na scrollbar para hindi sagabal sa design */
+.product-card-info p::-webkit-scrollbar {
+    width: 3px;
+}
+
+.product-card-info p::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 10px;
+}
+/* ==========================================
+   2. GRID LAYOUT
+   ========================================== */
+.grid-container {
+    display: grid;
+    grid-template-columns: 260px 1fr 280px;
+    grid-template-rows: 80px 1fr 80px;
+    height: 100%;
+    gap: 1px;
+    background-color: #E5E1DA;
+}
+
+.header-search-container{
+display: none;
+
+}
+/* ==========================================
+   3. HEADER & NAVIGATION
+   ========================================== */
+header {
+    grid-column: 1/-1;
+    background: #FFF;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    border-bottom: 1px solid #E5E1DA;
+}
+
+.logo {
+    font-family: 'Georgia', serif;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    color: #2D2926;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #666;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: #A67C52;
+}
+
+.ai-pill {
+    background: #A67C52;
+    color: #FFF;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+/* ==========================================
+   4. SIDEBARS (LEFT & RIGHT)
+   ========================================== */
+.sidebar-left {
+    background: #FFF;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+}
+
+.category-item {
+    padding: 12px;
+    border: 1px solid #F0EFEA;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all .2s;
+    text-decoration: none;
+    color: inherit;
+}
+
+.category-item:hover, .category-item.active {
+    background: #F9F7F4;
+    border-color: #A67C52;
+}
+
+.category-icon {
+    width: 32px;
+    height: 32px;
+    background: #F5F5F5;
+    border-radius: 4px;
+    display: grid;
+    place-items: center;
+}
+
+.sidebar-right {
+    background: #FFF;
+    padding: 24px;
+    border-left: 1px solid #E5E1DA;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    overflow-y: auto;
+}
+
+/* ==========================================
+   5. MAIN CONTENT & HERO
+   ========================================== */
+.main-content {
+    background: #FDFDFD;
+    padding: 32px;
+    position: relative;
+    display: block;
+    overflow-y: auto;
+    height: 100%;
+}
+/* ==========================================
+   UPDATED HERO SECTION (RESPONSIVE & NO OVERLAP)
+   ========================================== */
+.hero-display {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap; /* Papayagan ang text na bumaba sa ilalim ng image kung wala nang space */
+}
+
+.hero-img {
+    width: 100%;
+    max-width: 380px;
+    /* Ginawang auto ang height para hindi ma-stretch sa mobile */
+    height: auto; 
+    min-height: 340px; 
+    background: linear-gradient(45deg,#D2B48C 25%,#DEB887 25%,#DEB887 50%,#D2B48C 50%,#D2B48C 75%,#DEB887 75%,#DEB887 100%);
+    background-size: 20px 20px;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; 
+}
+
+.hero-img img {
+    width: 260px;
+    height: 220px;
+    object-fit: cover;
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border: 4px solid #FFF;
+}
+
+.hero-details {
+    flex: 1;
+    min-width: 280px;
+}
+
+.hero-details h1 {
+    font-family: 'Georgia', serif;
+    /* Ginamit ang clamp para kusa lumiliit ang font size depende sa screen size */
+    font-size: clamp(32px, 5vw, 48px); 
+    line-height: 1.1;
+    margin: 0 0 16px 0;
+    color: #1A1A1A;
+}
+.image-viewer-modal {
+    display: none; /* Default hidden */
+    position: fixed;
+    z-index: 9999; /* Sobrang taas para hindi matabunan */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-card {
+    animation: zoomIn 0.3s;
+}
+
+@keyframes zoomIn {
+    from {transform: scale(0.8); opacity: 0;}
+    to {transform: scale(1); opacity: 1;}
+}
+/* Specific adjustment para sa tablet size (1024px) */
+@media screen and (max-width: 1024px) {
+    .hero-display {
+        gap: 20px;
+        justify-content: center; /* I-center ang image at text */
+        text-align: center;
+    }
+}
+
+.price-tag {
+    font-size: 24px;
+    color: #A67C52;
+    font-weight: 300;
+    margin-bottom: 24px;
+}
+
+.order-btn {
+    background: #1A1A1A;
+    color: #FFF;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 0;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+}
+
+/* ==========================================
+   6. PRODUCT GRID & CARDS
+   ========================================== */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+}
+
+.product-card {
+    border: 1px solid #E5E1DA;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #FFF;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    border-color: #A67C52;
+}
+
+.product-card-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.product-card-info {
+    padding: 16px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #FDFDFD;
+}
+
+.product-card-title {
+    font-family: 'Georgia', serif;
+    font-size: 18px;
+    margin: 0 0 8px 0;
+    color: #1A1A1A;
+}
+
+.product-card-price {
+    color: #A67C52;
+    font-weight: 300;
+    font-size: 18px;
+    margin: 0;
+}
+
+.buy-btn {
+    background: #A67C52;
+    color: #FFF;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.ai-chat-box {
+    background: #F9F7F4;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.5;
+    border-left: 4px solid #A67C52;
+}
+
+.ai-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #DDD;
+    border-radius: 4px;
+    margin-top: 10px;
+    font-family: inherit;
+    font-size: 12px;
+    background: #FFF;
+}
+
+.ai-send {
+    background: #1A1A1A;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 8px;
+    font-size: 12px;
+    width: 100%;
+}
+
+.ai-message {
+    max-height: 250px;
+    min-height: 150px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.ai-msg {
+    padding: 8px;
+    border-radius: 4px;
+    background: #FFF;
+    border: 1px solid #EEE;
+}
+
+/* ==========================================
+   7. FOOTER
+   ========================================== */
+.footer-strip {
+    grid-column: 1/-1;
+    background: #FFF;
+    border-top: 1px solid #E5E1DA;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    gap: 60px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+}
+
+.step-num {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #DDD;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    color: #1A1A1A;
+    flex-shrink: 0;
+}
+
+.active-step {
+    color: #A67C52;
+    font-weight: 700;
+}
+
+/* ==========================================
+   8. RESPONSIVE QUERIES
+   ========================================== */
+
+/* Tablet View (1024px) */
+/* Tablet View (1024px) Fix */
+@media (max-width: 1024px) {
+    /* 1. Itago ang search bar sa sidebar-right */
+    .sidebar-right .search-bar {
+        display: none !important;
+    }
+
+    /* 2. Ayusin ang Grid Columns para lumuwang ang main content */
+    .grid-container {
+        grid-template-columns: 220px 1fr 240px; /* Liniitan ang sidebars */
+    }
+
+    /* 3. Ayusin ang Header Layout para iwas overlap */
+    header {
+        padding: 0 20px;
+        gap: 15px;
+    }
+
+    .logo {
+        font-size: 20px; /* Bahagyang liniitan ang text */
+        flex-shrink: 0;
+    }
+
+    /* I-reset ang absolute positioning na nagiging sanhi ng overlap */
+    .nav-links {
+        position: static !important;
+        transform: none !important;
+        gap: 15px;
+        font-size: 11px; /* Mas maliit na font para magkasya lahat */
+    }
+
+    /* 4. I-adjust ang AI Pill para hindi siksikan */
+    .ai-pill {
+        padding: 4px 10px;
+        font-size: 10px;
+        white-space: nowrap;
+    }
+}
+/* ==========================================
+   MOBILE INTERFACE OPTIMIZATION (FOCUS-DRIVEN)
+   ========================================== */
+@media screen and (max-width: 768px) {
+    /* 1. FIX SA SCROLL */
+    body, html {
+        height: auto !important;
+        overflow: visible !important;
+        overflow-x: hidden !important;
+    }
+
+    /* 2. GRID FIX */
+    .grid-container {
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+        background: #F9F7F4;
+    }
+
+    /* 3. HEADER OPTIMIZATION */
+    header {
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+        padding: 15px !important;
+        gap: 10px !important;
+        position: relative !important;
+    }
+
+    .logo { 
+        order: 1;
+        width: 100%; 
+        justify-content: center; 
+        margin-bottom: 5px; 
+    }
+
+    /* 4. SEARCH BAR LOGIC: Hidden button until FOCUSED */
+    .header-search-container {
+        display: block !important;
+        width: 100% !important;
+        order: 2;
+        padding: 0 5px;
+    }
+
+    .header-search-container form {
+        display: flex !important;
+        align-items: center;
+        background: #fff;
+        border: 2px solid #A67C52;
+        border-radius: 25px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .header-search-container input {
+        flex: 1;
+        border: none !important;
+        padding: 10px 15px;
+        font-size: 14px;
+        outline: none;
+        background: transparent;
+    }
+
+    /* DEFAULT: Tago ang button */
+    .header-search-container button {
+        display: none; 
+        background: #A67C52;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        animation: fadeInSearch 0.3s ease-in;
+    }
+
+    /* LOGIC: Kapag ang user ay nag-click (Focus) sa loob ng form, lilitaw ang button */
+    .header-search-container form:focus-within button {
+        display: flex !important;
+    }
+
+    /* 5. NAV LINKS (Maliit na font) */
+    .nav-links {
+        order: 3;
+        position: static !important;
+        transform: none !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap;
+        justify-content: center !important;
+        gap: 8px !important;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+        margin-top: 5px;
+    }
+
+    .nav-links a {
+        font-size: 10px !important; 
+        padding: 4px 6px;
+        letter-spacing: 0.3px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    /* 6. CLEAN UP */
+    .sidebar-left { display: none !important; }
+    .main-content { width: 100% !important; padding: 15px !important; overflow: visible !important; }
+    .ai-pill { order: 4; width: 100%; justify-content: center; }
+    .sidebar-right { width: 100% !important; border-top: 1px solid #E5E1DA; padding: 20px !important; }
+    .sidebar-right .search-bar { display: none !important; }
+
+    .footer-strip { padding: 15px !important; flex-wrap: wrap; height: auto !important; gap: 15px !important; }
+}
+
+@keyframes fadeInSearch {
+    from { opacity: 0; transform: translateX(10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+@media screen and (max-width: 600px) {
+    /* 1. Alisin ang space sa gilid ng body at grid container */
+    body, .grid-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100vw;
+        overflow-x: hidden; /* Iwasan ang pag-alog pakaliwa-kanan */
+    }
+
+    /* 2. Gawing full width ang main content */
+    .main-content {
+        padding: 8px !important; /* Konting hinga lang sa gilid */
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    /* 3. Siguraduhin na ang inventory container ay sagad sa gilid */
+    #admin-container, .admin-form, #admin-inventory-list {
+        width: 100% !important;
+        margin: 0 0 20px 0 !important;
+        padding: 10px !important;
+        border-radius: 0; /* Alisin ang kanto para magmukhang edge-to-edge */
+    }
+
+    /* 4. Table Table para sa Inventory - Sagad sa dulo */
+    #admin-inventory-list table {
+        font-size: 9px !important;
+        width: 100%;
+        display: block; 
+        overflow-x: auto; /* Scrollable pakanan para sa buttons */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* 5. Headers at Logo adjustment */
+    header {
+        padding: 10px !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+}
